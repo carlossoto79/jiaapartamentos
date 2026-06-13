@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase, exportTicketsToCSV } from '../lib/supabase'
 import { formatDate, formatCurrency, searchTickets } from '../lib/utils'
-import { Search, Download, X } from 'lucide-react'
+import { Search, Download, X, SlidersHorizontal } from 'lucide-react'
 import '../styles/search.css'
 
 const CATEGORIES = [
@@ -59,35 +59,24 @@ export default function SearchTickets({ onNavigate }) {
   const applyFilters = () => {
     let result = tickets
 
-    // Search term
     if (filters.searchTerm) {
       result = searchTickets(result, filters.searchTerm)
     }
-
-    // Unit filter
     if (filters.unit) {
       result = result.filter(t => t.units?.unit_number.toLowerCase() === filters.unit.toLowerCase())
     }
-
-    // Date range
     if (filters.dateFrom) {
       result = result.filter(t => new Date(t.report_date) >= new Date(filters.dateFrom))
     }
     if (filters.dateTo) {
       result = result.filter(t => new Date(t.report_date) <= new Date(filters.dateTo))
     }
-
-    // Categories
     if (filters.categories.length > 0) {
       result = result.filter(t => filters.categories.includes(t.category))
     }
-
-    // Statuses
     if (filters.statuses.length > 0) {
       result = result.filter(t => filters.statuses.includes(t.status))
     }
-
-    // Cost range
     const minCost = parseFloat(filters.minCost) || 0
     const maxCost = parseFloat(filters.maxCost) || Infinity
     result = result.filter(t => {
@@ -103,10 +92,7 @@ export default function SearchTickets({ onNavigate }) {
   }, [filters, tickets])
 
   const handleFilterChange = (filterName, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterName]: value
-    }))
+    setFilters(prev => ({ ...prev, [filterName]: value }))
   }
 
   const handleCategoryToggle = (category) => {
@@ -129,43 +115,40 @@ export default function SearchTickets({ onNavigate }) {
 
   const clearFilters = () => {
     setFilters({
-      searchTerm: '',
-      unit: '',
-      dateFrom: '',
-      dateTo: '',
-      categories: [],
-      statuses: [],
-      minCost: '',
-      maxCost: ''
+      searchTerm: '', unit: '', dateFrom: '', dateTo: '',
+      categories: [], statuses: [], minCost: '', maxCost: ''
     })
   }
 
   const handleExport = () => {
     if (filteredTickets.length === 0) {
-      alert('No hay boletas para exportar')
+      alert('No hay tickets para exportar')
       return
     }
     exportTicketsToCSV(filteredTickets)
   }
 
-  const totalSpent = filteredTickets.reduce((sum, t) => 
+  const totalSpent = filteredTickets.reduce((sum, t) =>
     sum + (t.labor_cost || 0) + (t.materials_cost || 0) + (t.tax_amount || 0),
     0
   )
 
+  const statusClass = (status) =>
+    status?.toLowerCase().replace(/\s/g, '-') || ''
+
   if (loading) {
-    return <div className="loading">Cargando boletas...</div>
+    return <div className="loading">Cargando tickets...</div>
   }
 
   return (
     <div className="search-container">
       <div className="search-header">
-        <h1>🔍 Buscar y Filtrar Boletas</h1>
-        <button 
-          className="btn-close"
-          onClick={() => onNavigate('dashboard')}
-        >
-          <X size={24} />
+        <div>
+          <h1>Buscar y filtrar tickets</h1>
+          <p>Explora el historial de mantenimiento</p>
+        </div>
+        <button className="btn-close" onClick={() => onNavigate('dashboard')} aria-label="Cerrar">
+          <X size={22} />
         </button>
       </div>
 
@@ -183,9 +166,9 @@ export default function SearchTickets({ onNavigate }) {
         </div>
 
         <details className="advanced-filters">
-          <summary>📋 Filtros Avanzados</summary>
+          <summary><SlidersHorizontal size={16} /> Filtros avanzados</summary>
 
-          <div className="filters-grid">
+          <div className="filter-row">
             <div className="filter-group">
               <label>Unidad</label>
               <input
@@ -195,58 +178,30 @@ export default function SearchTickets({ onNavigate }) {
                 onChange={(e) => handleFilterChange('unit', e.target.value)}
               />
             </div>
-
             <div className="filter-group">
               <label>Desde</label>
-              <input
-                type="date"
-                value={filters.dateFrom}
-                onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
-              />
+              <input type="date" value={filters.dateFrom} onChange={(e) => handleFilterChange('dateFrom', e.target.value)} />
             </div>
-
             <div className="filter-group">
               <label>Hasta</label>
-              <input
-                type="date"
-                value={filters.dateTo}
-                onChange={(e) => handleFilterChange('dateTo', e.target.value)}
-              />
+              <input type="date" value={filters.dateTo} onChange={(e) => handleFilterChange('dateTo', e.target.value)} />
             </div>
-
             <div className="filter-group">
-              <label>Costo Mínimo (COP)</label>
-              <input
-                type="number"
-                placeholder="0"
-                value={filters.minCost}
-                onChange={(e) => handleFilterChange('minCost', e.target.value)}
-                step="10000"
-              />
+              <label>Costo mínimo (COP)</label>
+              <input type="number" placeholder="0" value={filters.minCost} onChange={(e) => handleFilterChange('minCost', e.target.value)} step="10000" />
             </div>
-
             <div className="filter-group">
-              <label>Costo Máximo (COP)</label>
-              <input
-                type="number"
-                placeholder="∞"
-                value={filters.maxCost}
-                onChange={(e) => handleFilterChange('maxCost', e.target.value)}
-                step="10000"
-              />
+              <label>Costo máximo (COP)</label>
+              <input type="number" placeholder="Sin límite" value={filters.maxCost} onChange={(e) => handleFilterChange('maxCost', e.target.value)} step="10000" />
             </div>
           </div>
 
           <div className="filter-section">
-            <label>Categorías</label>
+            <label className="filter-section-label">Categorías</label>
             <div className="checkbox-group">
               {CATEGORIES.map(cat => (
-                <label key={cat} className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={filters.categories.includes(cat)}
-                    onChange={() => handleCategoryToggle(cat)}
-                  />
+                <label key={cat} className="checkbox-chip">
+                  <input type="checkbox" checked={filters.categories.includes(cat)} onChange={() => handleCategoryToggle(cat)} />
                   {cat}
                 </label>
               ))}
@@ -254,15 +209,11 @@ export default function SearchTickets({ onNavigate }) {
           </div>
 
           <div className="filter-section">
-            <label>Estados</label>
+            <label className="filter-section-label">Estados</label>
             <div className="checkbox-group">
               {STATUSES.map(status => (
-                <label key={status} className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={filters.statuses.includes(status)}
-                    onChange={() => handleStatusToggle(status)}
-                  />
+                <label key={status} className="checkbox-chip">
+                  <input type="checkbox" checked={filters.statuses.includes(status)} onChange={() => handleStatusToggle(status)} />
                   {status}
                 </label>
               ))}
@@ -270,38 +221,27 @@ export default function SearchTickets({ onNavigate }) {
           </div>
 
           <div className="filter-actions">
-            <button onClick={clearFilters} className="btn-secondary">
-              Limpiar filtros
-            </button>
+            <button onClick={clearFilters} className="btn-secondary">Limpiar filtros</button>
           </div>
         </details>
       </div>
 
       <div className="results-header">
         <div className="results-info">
-          <p>
-            <strong>Resultados:</strong> {filteredTickets.length} boleta{filteredTickets.length !== 1 ? 's' : ''}
-          </p>
-          <p>
-            <strong>Gasto total:</strong> {formatCurrency(totalSpent)}
-          </p>
+          <span><strong>{filteredTickets.length}</strong> ticket{filteredTickets.length !== 1 ? 's' : ''}</span>
+          <span className="results-divider">·</span>
+          <span>Gasto total: <strong>{formatCurrency(totalSpent)}</strong></span>
         </div>
-        <button 
-          onClick={handleExport}
-          className="btn-primary"
-          disabled={filteredTickets.length === 0}
-        >
-          <Download size={18} /> Exportar a CSV
+        <button onClick={handleExport} className="btn-secondary" disabled={filteredTickets.length === 0}>
+          <Download size={16} /> Exportar a CSV
         </button>
       </div>
 
       {filteredTickets.length === 0 ? (
         <div className="empty-state">
-          <Search size={48} />
-          <p>No se encontraron boletas con estos filtros</p>
-          <button onClick={clearFilters} className="btn-secondary">
-            Limpiar filtros
-          </button>
+          <Search size={40} />
+          <p>No se encontraron tickets con estos filtros</p>
+          <button onClick={clearFilters} className="btn-secondary">Limpiar filtros</button>
         </div>
       ) : (
         <div className="tickets-table-container">
@@ -312,12 +252,12 @@ export default function SearchTickets({ onNavigate }) {
                 <th>Fecha</th>
                 <th>Categoría</th>
                 <th>Descripción</th>
-                <th>Mano de Obra</th>
-                <th>Materiales</th>
-                <th>Impuesto</th>
-                <th>Total</th>
+                <th className="num">Mano de obra</th>
+                <th className="num">Materiales</th>
+                <th className="num">Impuesto</th>
+                <th className="num">Total</th>
                 <th>Estado</th>
-                <th>Acción</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -325,32 +265,21 @@ export default function SearchTickets({ onNavigate }) {
                 const totalCost = (ticket.labor_cost || 0) + (ticket.materials_cost || 0) + (ticket.tax_amount || 0)
                 return (
                   <tr key={ticket.id}>
-                    <td className="cell-unit">
-                      <strong>{ticket.units?.unit_number}</strong>
-                    </td>
+                    <td className="cell-unit"><strong>{ticket.units?.unit_number}</strong></td>
                     <td className="cell-date">{formatDate(ticket.report_date)}</td>
-                    <td className="cell-category">{ticket.category}</td>
+                    <td>{ticket.category}</td>
                     <td className="cell-description">
-                      {ticket.description.substring(0, 35)}...
+                      {ticket.description.length > 40 ? ticket.description.substring(0, 40) + '…' : ticket.description}
                     </td>
-                    <td className="cell-currency">{formatCurrency(ticket.labor_cost || 0)}</td>
-                    <td className="cell-currency">{formatCurrency(ticket.materials_cost || 0)}</td>
-                    <td className="cell-currency">{formatCurrency(ticket.tax_amount || 0)}</td>
-                    <td className="cell-currency total">
-                      <strong>{formatCurrency(totalCost)}</strong>
+                    <td className="num">{formatCurrency(ticket.labor_cost || 0)}</td>
+                    <td className="num">{formatCurrency(ticket.materials_cost || 0)}</td>
+                    <td className="num">{formatCurrency(ticket.tax_amount || 0)}</td>
+                    <td className="num cell-total"><strong>{formatCurrency(totalCost)}</strong></td>
+                    <td>
+                      <span className={`status-badge ${statusClass(ticket.status)}`}>{ticket.status}</span>
                     </td>
                     <td>
-                      <span className={`status-badge status-${ticket.status.toLowerCase().replace(/\s/g, '-')}`}>
-                        {ticket.status}
-                      </span>
-                    </td>
-                    <td>
-                      <button
-                        onClick={() => onNavigate('ticket-detail', ticket.id)}
-                        className="btn-view"
-                      >
-                        Ver
-                      </button>
+                      <button onClick={() => onNavigate('ticket-detail', ticket.id)} className="btn-view">Ver</button>
                     </td>
                   </tr>
                 )
