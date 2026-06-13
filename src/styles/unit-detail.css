@@ -132,6 +132,74 @@
   font-weight: 600;
 }
 
+/* Per-category cost breakdown */
+.cost-breakdown {
+  margin-bottom: 2.5rem;
+}
+
+.breakdown-heading {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 1.25rem 0;
+  color: var(--color-text);
+}
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.breakdown-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.breakdown-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.breakdown-category {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.breakdown-amount {
+  font-size: 13px;
+  color: var(--color-text-light);
+}
+
+.breakdown-bar-track {
+  height: 8px;
+  background-color: var(--color-bg-tertiary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.breakdown-bar-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.breakdown-pct {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  min-width: 36px;
+  text-align: right;
+}
+
 /* Timeline */
 .timeline-heading {
   font-size: 18px;
@@ -302,6 +370,16 @@
 
   .unit-detail-stats {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .breakdown-row {
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .breakdown-bar-track {
+    grid-column: 1 / -1;
+    order: 3;
   }
 
   .timeline-card-header {
