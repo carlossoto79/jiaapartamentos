@@ -1,17 +1,13 @@
-import { useState, useEffect } from 'react'
-import { useAuth } from './hooks/useAuth'
-import { signOut } from './lib/supabase'
-import Login from './components/Login'
+import { useState } from 'react'
 import Dashboard from './components/Dashboard'
 import NewTicket from './components/NewTicket'
 import TicketDetail from './components/TicketDetail'
 import SearchTickets from './components/SearchTickets'
 import UnitRegistry from './components/UnitRegistry'
-import { LogOut, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import './styles/app.css'
 
 export default function App() {
-  const { user, loading } = useAuth()
   const [currentPage, setCurrentPage] = useState('dashboard')
   const [params, setParams] = useState(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -20,21 +16,6 @@ export default function App() {
     setCurrentPage(page)
     setParams(param)
     setMobileMenuOpen(false)
-  }
-
-  const handleSignOut = async () => {
-    const { error } = await signOut()
-    if (!error) {
-      setCurrentPage('login')
-    }
-  }
-
-  if (loading) {
-    return <div className="loading-screen">Cargando...</div>
-  }
-
-  if (!user) {
-    return <Login />
   }
 
   return (
@@ -83,18 +64,6 @@ export default function App() {
             >
               📋 Unidades
             </button>
-          </li>
-          <li className="nav-divider"></li>
-          <li>
-            <button 
-              onClick={handleSignOut}
-              className="nav-logout"
-            >
-              <LogOut size={18} /> Salir
-            </button>
-          </li>
-          <li className="nav-user">
-            <span className="user-email">{user.email}</span>
           </li>
         </ul>
       </nav>
