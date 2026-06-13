@@ -11,7 +11,10 @@ const STATUS_CLASS = {
   'Verificado': 'verificado'
 }
 
-const REPETITION_WINDOW_MONTHS = 6
+// Matches getRecentSimilarTickets in supabase.js (180-day lookback)
+// so the recurring warning here agrees with the one shown in NewTicket.
+const REPETITION_WINDOW_DAYS = 180
+const REPETITION_THRESHOLD = 2
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
@@ -54,11 +57,13 @@ export default function UnitDetail({ unit, onNavigate }) {
     }
   }, [tickets, sorted])
 
-  // Recurring-problem detection: any category appearing 2+ times
-  // within the last REPETITION_WINDOW_MONTHS
+  // Recurring-problem detection: any category appearing REPETITION_THRESHOLD+
+  // times within REPETITION_WINDOW_DAYS. Mirrors getRecentSimilarTickets in
+  // supabase.js (same 180-day window) so this banner agrees with the warning
+  // shown when creating a new ticket.
   const recurring = useMemo(() => {
     const cutoff = new Date()
-    cutoff.setMonth(cutoff.getMonth() - REPETITION_WINDOW_MONTHS)
+    cutoff.setDate(cutoff.getDate() - REPETITION_WINDOW_DAYS)
 
     const counts = {}
     for (const t of tickets) {
@@ -71,9 +76,26 @@ export default function UnitDetail({ unit, onNavigate }) {
     }
 
     return Object.entries(counts)
-      .filter(([, count]) => count >= 2)
+      .filter(([, count]) => count >= REPETITION_THRESHOLD)
       .map(([category, count]) => ({ category, count }))
       .sort((a, b) => b.count - a.count)
+  }, [tickets])
+
+  // Per-category cost breakdown across the unit's whole history,
+  // sorted most-expensive first, with each category's share of the total.
+  const categoryBreakdown = useMemo(() => {
+    const totals = {}
+    for (const t of tickets) {
+      totals[t.category] = (totals[t.category] || 0) + ticketTotal(t)
+    }
+    const grand = Object.values(totals).reduce((sum, v) => sum + v, 0)
+    return Object.entries(totals)
+      .map(([category, amount]) => ({
+        category,
+        amount,
+        pct: grand > 0 ? Math.round((amount / grand) * 100) : 0
+      }))
+      .sort((a, b) => b.amount - a.amount)
   }, [tickets])
 
   if (!unit) {
@@ -157,8 +179,31 @@ export default function UnitDetail({ unit, onNavigate }) {
                 {recurring.map((r, i) => (
                   <span key={r.category}>
                     {i > 0 && ' · '}
-                    Problema recurrente: <strong>{r.category}</strong> ({r.count} veces en {REPETITION_WINDOW_MONTHS} meses)
+                    Problema recurrente: <strong>{r.category}</strong> ({r.count} veces en 6 meses)
                   </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {categoryBreakdown.length > 0 && (
+            <div className="cost-breakdown">
+              <h2 className="breakdown-heading">Costo por categoría</h2>
+              <div className="breakdown-list">
+                {categoryBreakdown.map(c => (
+                  <div className="breakdown-row" key={c.category}>
+                    <div className="breakdown-label">
+                      <span className="breakdown-category">{c.category}</span>
+                      <span className="breakdown-amount">{formatCurrency(c.amount)}</span>
+                    </div>
+                    <div className="breakdown-bar-track">
+                      <div
+                        className="breakdown-bar-fill"
+                        style={{ width: `${c.pct}%` }}
+                      />
+                    </div>
+                    <span className="breakdown-pct">{c.pct}%</span>
+                  </div>
                 ))}
               </div>
             </div>
