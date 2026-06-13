@@ -103,19 +103,19 @@ export default function UnitRegistry({ onNavigate }) {
     : 0
 
   if (loading || unitsLoading) {
-    return <div className="loading">Cargando registro de unidades...</div>
+    return <div className="loading">Cargando apartamentos...</div>
   }
 
   return (
     <div className="registry-container">
       <div className="registry-header">
-        <h1>📋 Registro de Unidades</h1>
+        <h1>Apartamentos</h1>
         <button 
           className="btn-primary"
           onClick={() => setShowAddForm(!showAddForm)}
           style={{ marginRight: '1rem' }}
         >
-          <Plus size={20} /> Agregar Unidad
+          <Plus size={20} /> Agregar Apartamento
         </button>
         <button 
           className="btn-close"
@@ -127,11 +127,11 @@ export default function UnitRegistry({ onNavigate }) {
 
       {showAddForm && (
         <div className="add-unit-form-container">
-          <h2>Agregar Nueva Unidad</h2>
+          <h2>Agregar Nuevo Apartamento</h2>
           {formError && <div className="alert alert-error">{formError}</div>}
           <form onSubmit={handleSubmit} className="add-unit-form">
             <div className="form-group">
-              <label htmlFor="unit_number">Número de Unidad *</label>
+              <label htmlFor="unit_number">Número de Apartamento *</label>
               <input
                 id="unit_number"
                 type="text"
@@ -176,7 +176,7 @@ export default function UnitRegistry({ onNavigate }) {
                 name="notes"
                 value={formData.notes}
                 onChange={handleInputChange}
-                placeholder="Notas sobre la unidad..."
+                placeholder="Notas sobre el apartamento..."
                 rows={3}
               />
             </div>
@@ -198,7 +198,7 @@ export default function UnitRegistry({ onNavigate }) {
                 className="btn-primary"
                 disabled={formLoading}
               >
-                {formLoading ? 'Creando...' : 'Crear Unidad'}
+                {formLoading ? 'Creando...' : 'Crear Apartamento'}
               </button>
             </div>
           </form>
@@ -208,7 +208,7 @@ export default function UnitRegistry({ onNavigate }) {
       <div className="registry-search">
         <input
           type="text"
-          placeholder="Buscar por unidad o edificio..."
+          placeholder="Buscar por apartamento o edificio..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
@@ -217,7 +217,7 @@ export default function UnitRegistry({ onNavigate }) {
 
       <div className="registry-stats">
         <div className="stat-badge">
-          <span className="stat-label">Total de Unidades:</span>
+          <span className="stat-label">Total de Apartamentos:</span>
           <span className="stat-value">{filteredUnits.length}</span>
         </div>
         <div className="stat-badge">
@@ -228,7 +228,7 @@ export default function UnitRegistry({ onNavigate }) {
 
       {filteredUnits.length === 0 ? (
         <div className="empty-state">
-          <p>No se encontraron unidades</p>
+          <p>No se encontraron apartamentos</p>
         </div>
       ) : (
         <div className="units-list">
@@ -261,7 +261,7 @@ export default function UnitRegistry({ onNavigate }) {
 
                 <div className="unit-stats-row">
                   <div className="unit-stat">
-                    <span className="label">Boletas:</span>
+                    <span className="label">Tickets:</span>
                     <span className="value">{stats.ticketCount}</span>
                   </div>
                   <div className="unit-stat">
@@ -278,9 +278,9 @@ export default function UnitRegistry({ onNavigate }) {
 
                 <button
                   className="btn-view-tickets"
-                  onClick={() => onNavigate('dashboard')}
+                  onClick={() => onNavigate('unit-detail', unit)}
                 >
-                  Ver boletas de esta unidad →
+                  Ver historial de este apartamento →
                 </button>
               </div>
             )
