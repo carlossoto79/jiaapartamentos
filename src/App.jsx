@@ -5,7 +5,10 @@ import TicketDetail from './components/TicketDetail'
 import SearchTickets from './components/SearchTickets'
 import UnitRegistry from './components/UnitRegistry'
 import UnitDetail from './components/UnitDetail'
-import { Menu, Moon, Sun } from 'lucide-react'
+import {
+  Menu, Moon, Sun, Building2,
+  LayoutDashboard, Building, Plus, Search
+} from 'lucide-react'
 import './styles/app.css'
 
 export default function App() {
@@ -32,86 +35,90 @@ export default function App() {
     setMobileMenuOpen(false)
   }
 
+  const navItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'registry', label: 'Apartamentos', icon: Building, match: ['registry', 'unit-detail'] },
+    { id: 'new-ticket', label: 'Nuevo ticket', icon: Plus },
+    { id: 'search', label: 'Buscar', icon: Search },
+  ]
+
+  const isActive = (item) =>
+    (item.match || [item.id]).includes(currentPage)
+
   return (
     <div className="app-container">
       <nav className="app-nav">
-        <div className="nav-header">
-          <button 
-            className="menu-toggle"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <Menu size={24} />
-          </button>
-          <h1 className="app-title">JIA Apartamentos</h1>
-          <button 
+        <div className="nav-top">
+          <div className="nav-header">
+            <div className="nav-logo">
+              <Building2 size={18} />
+            </div>
+            <h1 className="app-title">
+              JIA<span>Apartamentos</span>
+            </h1>
+            <button
+              className="menu-toggle"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu"
+            >
+              <Menu size={22} />
+            </button>
+          </div>
+
+          <ul className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
+            {navItems.map(item => {
+              const Icon = item.icon
+              return (
+                <li key={item.id}>
+                  <button
+                    onClick={() => navigate(item.id)}
+                    className={isActive(item) ? 'active' : ''}
+                  >
+                    <Icon size={18} /> {item.label}
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+
+        <div className="nav-footer">
+          <span className="nav-copyright">© 2026 JIA</span>
+          <button
             className="theme-toggle"
             onClick={() => setDarkMode(!darkMode)}
             title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+            aria-label={darkMode ? 'Modo claro' : 'Modo oscuro'}
           >
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            {darkMode ? <Sun size={16} /> : <Moon size={16} />}
           </button>
         </div>
-
-        <ul className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
-          <li>
-            <button 
-              onClick={() => navigate('dashboard')}
-              className={currentPage === 'dashboard' ? 'active' : ''}
-            >
-              Dashboard
-            </button>
-          </li>
-          <li>
-            <button 
-              onClick={() => navigate('registry')}
-              className={currentPage === 'registry' || currentPage === 'unit-detail' ? 'active' : ''}
-            >
-              Apartamentos
-            </button>
-          </li>
-          <li>
-            <button 
-              onClick={() => navigate('new-ticket')}
-              className={currentPage === 'new-ticket' ? 'active' : ''}
-            >
-              Nuevo Ticket
-            </button>
-          </li>
-          <li>
-            <button 
-              onClick={() => navigate('search')}
-              className={currentPage === 'search' ? 'active' : ''}
-            >
-              Buscar
-            </button>
-          </li>
-        </ul>
       </nav>
 
       <main className="app-main">
-        {currentPage === 'dashboard' && (
-          <Dashboard onNavigate={navigate} />
-        )}
-        {currentPage === 'new-ticket' && (
-          <NewTicket onNavigate={navigate} />
-        )}
-        {currentPage === 'ticket-detail' && params && (
-          <TicketDetail ticketId={params} onNavigate={navigate} />
-        )}
-        {currentPage === 'search' && (
-          <SearchTickets onNavigate={navigate} />
-        )}
-        {currentPage === 'registry' && (
-          <UnitRegistry onNavigate={navigate} />
-        )}
-        {currentPage === 'unit-detail' && params && (
-          <UnitDetail unit={params} onNavigate={navigate} />
-        )}
+        <div className="content-area">
+          <div className="content-inner">
+            {currentPage === 'dashboard' && (
+              <Dashboard onNavigate={navigate} />
+            )}
+            {currentPage === 'new-ticket' && (
+              <NewTicket onNavigate={navigate} />
+            )}
+            {currentPage === 'ticket-detail' && params && (
+              <TicketDetail ticketId={params} onNavigate={navigate} />
+            )}
+            {currentPage === 'search' && (
+              <SearchTickets onNavigate={navigate} />
+            )}
+            {currentPage === 'registry' && (
+              <UnitRegistry onNavigate={navigate} />
+            )}
+            {currentPage === 'unit-detail' && params && (
+              <UnitDetail unit={params} onNavigate={navigate} />
+            )}
+          </div>
+        </div>
       </main>
-
-      <footer className="app-footer">
-        <p>Sistema de Seguimiento de Mantenimiento JIA Apartamentos © 2024</p>
-      </footer>
     </div>
   )
 }
