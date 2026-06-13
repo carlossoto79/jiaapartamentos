@@ -161,3 +161,51 @@
   .form-actions { flex-direction: column-reverse; }
   .form-actions button { width: 100%; }
 }
+
+/* ===== Additions for component markup ===== */
+.form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.checkbox-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  justify-content: flex-start;
+  padding-top: 1.6rem;
+}
+
+.checkbox-row label { margin-bottom: 0; }
+
+.cost-summary {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cost-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--color-text-light);
+}
+
+.cost-line.total {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.6rem;
+  margin-top: 0.2rem;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.cost-line.total span { font-weight: 600; }

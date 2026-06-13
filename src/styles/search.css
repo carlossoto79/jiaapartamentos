@@ -172,3 +172,161 @@
   .result-header { flex-direction: column; }
   .result-footer { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
 }
+
+/* ===== Additions for table layout & filters ===== */
+.search-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.quick-search { margin-bottom: 0.5rem; }
+
+.advanced-filters { margin-top: 0.75rem; }
+
+.advanced-filters summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-light);
+  padding: 0.4rem 0;
+  list-style: none;
+  user-select: none;
+}
+
+.advanced-filters summary::-webkit-details-marker { display: none; }
+.advanced-filters summary:hover { color: var(--color-text); }
+.advanced-filters[open] summary { margin-bottom: 1rem; color: var(--color-text); }
+
+.filter-section { margin-top: 1rem; }
+
+.filter-section-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.6rem;
+}
+
+.checkbox-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.checkbox-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 13px;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--color-text-light);
+}
+
+.checkbox-chip:hover { border-color: var(--color-primary); }
+.checkbox-chip input { width: auto; margin: 0; }
+
+.filter-actions {
+  margin-top: 1.1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.results-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 14px;
+  color: var(--color-text-light);
+}
+
+.results-info strong { color: var(--color-text); font-weight: 600; }
+.results-divider { color: var(--color-border-strong); }
+
+.tickets-table-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+}
+
+.tickets-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tickets-table thead th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--color-text-lighter);
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+  background: var(--color-bg-secondary);
+}
+
+.tickets-table thead th.num { text-align: right; }
+
+.tickets-table tbody td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text-light);
+  vertical-align: middle;
+}
+
+.tickets-table tbody tr:last-child td { border-bottom: none; }
+.tickets-table tbody tr:hover { background: var(--color-bg-secondary); }
+
+.tickets-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.tickets-table .cell-unit strong { color: var(--color-text); }
+.tickets-table .cell-total strong { color: var(--color-text); }
+.tickets-table .cell-description { color: var(--color-text-light); max-width: 220px; }
+
+.status-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-badge.abierto { background-color: var(--color-success-soft); color: var(--color-success); }
+.status-badge.asignado { background-color: var(--color-primary-soft); color: var(--color-primary); }
+.status-badge.reparado { background-color: var(--color-warning-soft); color: var(--color-warning); }
+.status-badge.verificado { background-color: var(--color-success-soft); color: var(--color-success); }
+
+.tickets-table .btn-view {
+  padding: 0.35rem 0.75rem;
+  font-size: 12px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius);
+}
+
+.tickets-table .btn-view:hover { background-color: var(--color-primary-dark); }
+
+@media (max-width: 768px) {
+  .search-header { flex-wrap: wrap; }
+  .results-header { flex-direction: column; align-items: stretch; }
+  .results-header button { width: 100%; }
+}

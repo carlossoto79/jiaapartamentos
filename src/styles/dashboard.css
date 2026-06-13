@@ -173,3 +173,99 @@
   .action-buttons { flex-direction: column; }
   .action-buttons button { width: 100%; }
 }
+
+/* ===== Additions for component markup ===== */
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.stat-label-row .stat-label {
+  margin-bottom: 0;
+}
+
+.accent-blue { color: var(--color-primary); }
+.accent-green { color: var(--color-success); }
+.accent-amber { color: var(--color-warning); }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.section-header h2 { margin: 0; }
+
+.ticket-unit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ticket-category {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-light);
+  background: var(--color-bg-tertiary);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius);
+}
+
+.ticket-status.abierto { background-color: var(--color-success-soft); color: var(--color-success); }
+.ticket-status.asignado { background-color: var(--color-primary-soft); color: var(--color-primary); }
+.ticket-status.reparado { background-color: var(--color-warning-soft); color: var(--color-warning); }
+.ticket-status.verificado { background-color: var(--color-success-soft); color: var(--color-success); }
+
+.alerts-section { margin-bottom: 2rem; }
+
+.alerts-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 0.85rem 0;
+}
+
+.alerts-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.alerts-list .alert {
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.alert-content { flex: 1; }
+.alert-content p { margin: 0; }
+
+.alert-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  color: inherit;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  border-radius: var(--radius);
+  white-space: nowrap;
+}
+
+.alert-action:hover { background: rgba(0,0,0,0.06); }
+
+.dashboard-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  .section-header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .section-header button { width: 100%; }
+}
