@@ -2,18 +2,61 @@ import { useState, useEffect } from 'react'
 import { useUnits } from '../hooks/useUnits'
 import { supabase } from '../lib/supabase'
 import { formatCurrency } from '../lib/utils'
-import { X } from 'lucide-react'
+import { X, Plus } from 'lucide-react'
 import '../styles/registry.css'
 
 export default function UnitRegistry({ onNavigate }) {
-  const { units, loading: unitsLoading } = useUnits()
+  const { units, loading: unitsLoading, addUnit } = useUnits()
   const [unitStats, setUnitStats] = useState({})
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [formData, setFormData] = useState({
+    unit_number: '',
+    building: '',
+    floor: '',
+    notes: ''
+  })
+  const [formError, setFormError] = useState(null)
+  const [formLoading, setFormLoading] = useState(false)
 
   useEffect(() => {
     loadUnitStats()
   }, [units])
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'floor' ? parseInt(value) || '' : value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setFormError(null)
+
+    if (!formData.unit_number || !formData.building || formData.floor === '') {
+      setFormError('Por favor completa los campos requeridos')
+      return
+    }
+
+    setFormLoading(true)
+    try {
+      await addUnit({
+        unit_number: formData.unit_number,
+        building: formData.building,
+        floor: parseInt(formData.floor),
+        notes: formData.notes || null
+      })
+      setFormData({ unit_number: '', building: '', floor: '', notes: '' })
+      setShowAddForm(false)
+    } catch (err) {
+      setFormError(err.message || 'Error al crear la unidad')
+    } finally {
+      setFormLoading(false)
+    }
+  }
 
   const loadUnitStats = async () => {
     setLoading(true)
@@ -68,12 +111,99 @@ export default function UnitRegistry({ onNavigate }) {
       <div className="registry-header">
         <h1>📋 Registro de Unidades</h1>
         <button 
+          className="btn-primary"
+          onClick={() => setShowAddForm(!showAddForm)}
+          style={{ marginRight: '1rem' }}
+        >
+          <Plus size={20} /> Agregar Unidad
+        </button>
+        <button 
           className="btn-close"
           onClick={() => onNavigate('dashboard')}
         >
           <X size={24} />
         </button>
       </div>
+
+      {showAddForm && (
+        <div className="add-unit-form-container">
+          <h2>Agregar Nueva Unidad</h2>
+          {formError && <div className="alert alert-error">{formError}</div>}
+          <form onSubmit={handleSubmit} className="add-unit-form">
+            <div className="form-group">
+              <label htmlFor="unit_number">Número de Unidad *</label>
+              <input
+                id="unit_number"
+                type="text"
+                name="unit_number"
+                value={formData.unit_number}
+                onChange={handleInputChange}
+                placeholder="Ej: 4B, 12A, 3-C"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="building">Edificio *</label>
+              <input
+                id="building"
+                type="text"
+                name="building"
+                value={formData.building}
+                onChange={handleInputChange}
+                placeholder="Ej: Edificio Norte"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="floor">Piso *</label>
+              <input
+                id="floor"
+                type="number"
+                name="floor"
+                value={formData.floor}
+                onChange={handleInputChange}
+                placeholder="Ej: 4"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="notes">Notas (opcional)</label>
+              <textarea
+                id="notes"
+                name="notes"
+                value={formData.notes}
+                onChange={handleInputChange}
+                placeholder="Notas sobre la unidad..."
+                rows={3}
+              />
+            </div>
+
+            <div className="form-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => {
+                  setShowAddForm(false)
+                  setFormData({ unit_number: '', building: '', floor: '', notes: '' })
+                  setFormError(null)
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={formLoading}
+              >
+                {formLoading ? 'Creando...' : 'Crear Unidad'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="registry-search">
         <input
