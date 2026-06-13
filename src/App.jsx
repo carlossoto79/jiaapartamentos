@@ -4,6 +4,7 @@ import NewTicket from './components/NewTicket'
 import TicketDetail from './components/TicketDetail'
 import SearchTickets from './components/SearchTickets'
 import UnitRegistry from './components/UnitRegistry'
+import UnitDetail from './components/UnitDetail'
 import { Menu, Moon, Sun } from 'lucide-react'
 import './styles/app.css'
 
@@ -63,7 +64,7 @@ export default function App() {
           <li>
             <button 
               onClick={() => navigate('registry')}
-              className={currentPage === 'registry' ? 'active' : ''}
+              className={currentPage === 'registry' || currentPage === 'unit-detail' ? 'active' : ''}
             >
               Apartamentos
             </button>
@@ -102,6 +103,9 @@ export default function App() {
         )}
         {currentPage === 'registry' && (
           <UnitRegistry onNavigate={navigate} />
+        )}
+        {currentPage === 'unit-detail' && params && (
+          <UnitDetail unit={params} onNavigate={navigate} />
         )}
       </main>
 
