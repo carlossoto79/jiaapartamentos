@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useUnits } from '../hooks/useUnits'
 import { supabase } from '../lib/supabase'
 import { formatCurrency } from '../lib/utils'
-import { X, Plus } from 'lucide-react'
+import { X, Plus, AlertTriangle, ArrowRight } from 'lucide-react'
 import '../styles/registry.css'
 
 export default function UnitRegistry({ onNavigate }) {
@@ -270,7 +270,10 @@ export default function UnitRegistry({ onNavigate }) {
                   </div>
                   {isHighCost && (
                     <div className="unit-stat warning">
-                      <span className="label">⚠️ Costo Alto:</span>
+                      <span className="label">
+                        <AlertTriangle size={13} style={{ verticalAlign: '-2px', marginRight: '4px' }} />
+                        Costo Alto:
+                      </span>
                       <span className="value">Revisar problemas sistémicos</span>
                     </div>
                   )}
@@ -280,7 +283,8 @@ export default function UnitRegistry({ onNavigate }) {
                   className="btn-view-tickets"
                   onClick={() => onNavigate('unit-detail', unit)}
                 >
-                  Ver historial de este apartamento →
+                  Ver historial de este apartamento
+                  <ArrowRight size={16} style={{ verticalAlign: '-3px', marginLeft: '4px' }} />
                 </button>
               </div>
             )
