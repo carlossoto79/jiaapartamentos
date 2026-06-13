@@ -1,242 +1,248 @@
 .form-container {
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
 }
 
 .form-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .form-header h1 {
-  margin: 0;
-  font-size: 1.75rem;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--color-text);
 }
 
-form {
-  padding: 2rem;
+.form-header p {
+  margin: 0;
+  color: var(--color-text-light);
+  font-size: 15px;
 }
 
 .form-section {
-  margin-bottom: 2.5rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
 }
 
-.form-section:last-of-type {
-  border-bottom: none;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0;
+.form-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.form-section h2 {
-  font-size: 1.1rem;
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #1f2937;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
-  display: block;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   margin-bottom: 0.5rem;
-  color: #1f2937;
-  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.form-group label .required {
+  color: var(--color-error);
+  margin-left: 0.25rem;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  width: 100%;
-}
-
-.form-group input[type="checkbox"] {
-  width: auto;
-  margin-right: 0.5rem;
-}
-
-.form-group label:has(input[type="checkbox"]) {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-  font-weight: 500;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.cost-summary {
-  background-color: #f3f4f6;
-  padding: 1rem;
-  border-radius: 8px;
-  border-left: 4px solid var(--color-primary);
-  margin-top: 1rem;
-}
-
-.cost-line {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  font-size: 0.95rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 14px;
   color: var(--color-text);
-}
-
-.cost-line span:last-child {
-  font-weight: 600;
-  text-align: right;
-}
-
-.cost-line.total {
-  border-top: 2px solid var(--color-border);
-  padding-top: 0.75rem;
-  margin-top: 0.75rem;
-  font-size: 1.1rem;
-  color: #1f2937;
-}
-
-/* Info display */
-.info-display {
-  background-color: #f9fafb;
-  padding: 1rem;
-  border-radius: 8px;
-  border-left: 4px solid var(--color-primary);
-}
-
-.info-display p {
-  margin: 0.5rem 0;
-}
-
-/* Attachments */
-.attachments-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.attachment-upload label {
-  display: block;
-}
-
-.upload-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  border: 2px dashed var(--color-border);
-  border-radius: 8px;
-  background-color: #f9fafb;
-  color: var(--color-primary);
-  font-weight: 600;
-  cursor: pointer;
+  background-color: var(--color-bg);
+  font-family: inherit;
   transition: var(--transition);
 }
 
-.upload-btn:hover {
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
   border-color: var(--color-primary);
-  background-color: #f0f9ff;
+  box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.1);
 }
 
-.attachments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-lighter);
 }
 
-.attachment-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  border-left: 4px solid var(--color-success);
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
 }
 
-.attachment-item span {
-  flex: 1;
-  color: var(--color-text);
-  font-weight: 500;
+.form-group select {
+  cursor: pointer;
 }
 
-.attachment-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 1rem;
-  background-color: var(--color-primary);
-  color: white;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.85rem;
+.form-hint {
+  font-size: 13px;
+  color: var(--color-text-lighter);
+  margin-top: 0.5rem;
 }
 
-.attachment-link:hover {
-  background-color: var(--color-primary-dark);
+.form-error {
+  font-size: 13px;
+  color: var(--color-error);
+  margin-top: 0.5rem;
 }
 
-/* Form Actions */
 .form-actions {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
-  padding-top: 1.5rem;
   border-top: 1px solid var(--color-border);
-  justify-content: flex-end;
+  padding-top: 2rem;
 }
 
-.form-actions button {
+.btn-submit,
+.btn-cancel {
   padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.form-actions .btn-secondary {
+.btn-submit {
+  background-color: var(--color-primary);
+  color: white;
   flex: 1;
-  max-width: 150px;
 }
 
-.form-actions .btn-primary {
+.btn-submit:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   flex: 1;
-  max-width: 200px;
 }
 
-/* Mobile */
+.btn-cancel:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.file-upload {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background-color: var(--color-bg);
+}
+
+.file-upload:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-tertiary);
+}
+
+.file-upload input {
+  display: none;
+}
+
+.file-upload-text {
+  color: var(--color-text-light);
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+.file-item-name {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.file-item-remove {
+  background: none;
+  border: none;
+  color: var(--color-error);
+  cursor: pointer;
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+.file-item-remove:hover {
+  opacity: 0.7;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: 14px;
+}
+
+.alert-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--color-error);
+}
+
+.alert-success {
+  background-color: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--color-success);
+}
+
 @media (max-width: 768px) {
-  .form-container {
-    border-radius: 0;
-    box-shadow: none;
-    min-height: 100vh;
-  }
-
-  form {
-    padding: 1.5rem 1rem;
-  }
-
   .form-section {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
+    padding: 1.5rem;
   }
 
   .form-row {
     grid-template-columns: 1fr;
-  }
-
-  .attachments-section {
-    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .form-actions {
@@ -245,11 +251,5 @@ form {
 
   .form-actions button {
     width: 100%;
-    padding: 1rem;
-  }
-
-  .form-actions .btn-secondary,
-  .form-actions .btn-primary {
-    max-width: 100%;
   }
 }
