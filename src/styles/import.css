@@ -1,0 +1,174 @@
+.import-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 17, 23, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.import-modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 720px;
+  box-shadow: var(--shadow-lg);
+  padding: 1.5rem;
+}
+
+.import-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.import-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.import-instructions {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.import-instructions p { margin: 0 0 0.5rem 0; font-size: 14px; color: var(--color-text-light); }
+.import-instructions p:last-child { margin-bottom: 0; }
+
+.import-instructions code {
+  display: inline-block;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 13px;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.import-hint { font-size: 13px; color: var(--color-text-lighter); }
+
+.import-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.import-or { font-size: 13px; color: var(--color-text-lighter); }
+
+.import-textarea {
+  width: 100%;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  resize: vertical;
+  margin-bottom: 0.75rem;
+}
+
+.import-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.import-actions-row { margin-bottom: 1rem; }
+
+.import-preview { margin-top: 0.5rem; }
+
+.import-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+  font-size: 13px;
+}
+
+.import-count { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 500; }
+.import-count.valid { color: var(--color-success); }
+.import-count.invalid { color: var(--color-error); }
+.import-count.note { color: var(--color-text-light); }
+
+.import-table-wrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: auto;
+  max-height: 320px;
+}
+
+.import-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.import-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-bg-secondary);
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--color-text-lighter);
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.import-table tbody td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.import-table tbody tr:last-child td { border-bottom: none; }
+.import-table tr.row-error td { background: var(--color-error-soft); }
+
+.import-table .muted { color: var(--color-text-lighter); }
+.import-table .ok { color: var(--color-success); }
+.import-table .cell-status { white-space: nowrap; }
+.import-table .row-error-text { color: var(--color-error); font-size: 12px; }
+
+.import-confirm {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.1rem;
+}
+
+.import-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem 0.5rem;
+  color: var(--color-success);
+}
+
+.import-success p { color: var(--color-text); margin: 0; }
+.import-success .btn-primary { margin-top: 0.5rem; }
+
+@media (max-width: 768px) {
+  .import-overlay { padding: 1rem; }
+  .import-modal { padding: 1.25rem; }
+  .import-confirm { flex-direction: column-reverse; }
+  .import-confirm button { width: 100%; }
+}
