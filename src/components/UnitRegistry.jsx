@@ -17,6 +17,7 @@ export default function UnitRegistry({ onNavigate }) {
     unit_number: '',
     building: '',
     floor: '',
+    address: '',
     notes: ''
   })
   const [formError, setFormError] = useState(null)
@@ -38,7 +39,7 @@ export default function UnitRegistry({ onNavigate }) {
     e.preventDefault()
     setFormError(null)
 
-    if (!formData.unit_number || !formData.building || formData.floor === '') {
+    if (!formData.unit_number || !formData.building || formData.floor === '' || !formData.address.trim()) {
       setFormError('Por favor completa los campos requeridos')
       return
     }
@@ -49,9 +50,10 @@ export default function UnitRegistry({ onNavigate }) {
         unit_number: formData.unit_number,
         building: formData.building,
         floor: parseInt(formData.floor),
+        address: formData.address.trim(),
         notes: formData.notes || null
       })
-      setFormData({ unit_number: '', building: '', floor: '', notes: '' })
+      setFormData({ unit_number: '', building: '', floor: '', address: '', notes: '' })
       setShowAddForm(false)
     } catch (err) {
       setFormError(err.message || 'Error al crear la unidad')
@@ -186,6 +188,19 @@ export default function UnitRegistry({ onNavigate }) {
             </div>
 
             <div className="form-group">
+              <label htmlFor="address">Dirección *</label>
+              <input
+                id="address"
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                placeholder="Ej: Calle 10 #43-22"
+                required
+              />
+            </div>
+
+            <div className="form-group">
               <label htmlFor="notes">Notas (opcional)</label>
               <textarea
                 id="notes"
@@ -203,7 +218,7 @@ export default function UnitRegistry({ onNavigate }) {
                 className="btn-secondary"
                 onClick={() => {
                   setShowAddForm(false)
-                  setFormData({ unit_number: '', building: '', floor: '', notes: '' })
+                  setFormData({ unit_number: '', building: '', floor: '', address: '', notes: '' })
                   setFormError(null)
                 }}
               >
@@ -263,6 +278,9 @@ export default function UnitRegistry({ onNavigate }) {
                     <p className="unit-location">
                       {unit.building}, Piso {unit.floor}
                     </p>
+                    {unit.address && (
+                      <p className="unit-address">{unit.address}</p>
+                    )}
                   </div>
                   <div className={`unit-cost-badge ${isHighCost ? 'warning' : 'normal'}`}>
                     {formatCurrency(stats.totalSpent)}

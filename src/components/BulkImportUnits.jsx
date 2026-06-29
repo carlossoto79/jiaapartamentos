@@ -3,8 +3,8 @@ import { supabase } from '../lib/supabase'
 import { Upload, ClipboardPaste, X, CheckCircle2, AlertCircle, FileText } from 'lucide-react'
 import '../styles/import.css'
 
-const EXPECTED_COLUMNS = ['unit_number', 'building', 'floor', 'notes']
-const HEADER_TOKENS = ['unit_number', 'numero', 'número', 'unidad', 'apartamento', 'building', 'edificio', 'floor', 'piso', 'notes', 'notas']
+const EXPECTED_COLUMNS = ['unit_number', 'building', 'floor', 'address', 'notes']
+const HEADER_TOKENS = ['unit_number', 'numero', 'número', 'unidad', 'apartamento', 'building', 'edificio', 'floor', 'piso', 'address', 'direccion', 'dirección', 'notes', 'notas']
 
 // Split a single line on tab OR comma, trimming each cell.
 function splitLine(line) {
@@ -40,7 +40,7 @@ function parseRows(text) {
   const rows = []
   for (let i = startIndex; i < lines.length; i++) {
     const cells = splitLine(lines[i])
-    const [unit_number = '', building = '', floor = '', notes = ''] = cells
+    const [unit_number = '', building = '', floor = '', address = '', notes = ''] = cells
     const errors = []
 
     if (!unit_number) errors.push('Falta el número de apartamento')
@@ -50,12 +50,14 @@ function parseRows(text) {
     } else if (isNaN(parseInt(floor, 10))) {
       errors.push('El piso debe ser un número')
     }
+    if (!address) errors.push('Falta la dirección')
 
     rows.push({
       lineNumber: i + 1,
       unit_number,
       building,
       floor,
+      address,
       notes,
       errors
     })
@@ -116,6 +118,7 @@ export default function BulkImportUnits({ onClose, onImported }) {
         unit_number: r.unit_number,
         building: r.building,
         floor: parseInt(r.floor, 10),
+        address: r.address,
         notes: r.notes || null
       }))
 
@@ -157,7 +160,7 @@ export default function BulkImportUnits({ onClose, onImported }) {
               <p>
                 Pega las filas o sube un archivo CSV con las columnas en este orden:
               </p>
-              <code>número de apartamento, edificio, piso, notas</code>
+              <code>número de apartamento, edificio, piso, dirección, notas</code>
               <p className="import-hint">
                 Las notas son opcionales. La primera fila puede ser un encabezado (se detecta y omite automáticamente). Puedes pegar directamente desde Excel o Google Sheets.
               </p>
@@ -184,7 +187,7 @@ export default function BulkImportUnits({ onClose, onImported }) {
               className="import-textarea"
               value={rawText}
               onChange={handleTextChange}
-              placeholder={'4B, Edificio Norte, 4, Calentador nuevo 2024\n7C, Edificio Sur, 7\n101, Edificio Maruja, 1'}
+              placeholder={'4B, Edificio Norte, 4, Calle 10 #43-22, Calentador nuevo 2024\n7C, Edificio Sur, 7, Carrera 5 #12-30\n101, Edificio Maruja, 1, Avenida Las Palmas #8-15'}
               rows={7}
             />
 
@@ -226,6 +229,7 @@ export default function BulkImportUnits({ onClose, onImported }) {
                         <th>Apartamento</th>
                         <th>Edificio</th>
                         <th>Piso</th>
+                        <th>Dirección</th>
                         <th>Notas</th>
                         <th></th>
                       </tr>
@@ -237,6 +241,7 @@ export default function BulkImportUnits({ onClose, onImported }) {
                           <td>{r.unit_number || <span className="muted">—</span>}</td>
                           <td>{r.building || <span className="muted">—</span>}</td>
                           <td>{r.floor || <span className="muted">—</span>}</td>
+                          <td>{r.address || <span className="muted">—</span>}</td>
                           <td>{r.notes || <span className="muted">—</span>}</td>
                           <td className="cell-status">
                             {r.errors.length === 0 ? (

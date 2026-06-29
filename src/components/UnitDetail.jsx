@@ -130,6 +130,9 @@ export default function UnitDetail({ unit, onNavigate }) {
           <p className="unit-detail-location">
             {unit.building} · Piso {unit.floor}
           </p>
+          {unit.address && (
+            <p className="unit-detail-address">{unit.address}</p>
+          )}
         </div>
         <button
           className="btn-primary unit-detail-new"
